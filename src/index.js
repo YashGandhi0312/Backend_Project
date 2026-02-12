@@ -35,8 +35,20 @@ dotenv.config({path : './.env'})
 
 import connectDB from "./db/index.js"
 
-connectDB()
+const serverStart = async () => {
+    try {
+        await connectDB();
+        const server = app.listen(process.env.PORT, () => {
+            console.log(`Server is running on port ${process.env.PORT}`);
+        })
 
-app.listen(process.env.PORT, () => {
-    console.log(`App is running  on port ${process.env.PORT}`)
-})
+        server.on("error", (error) => {
+            console.log("Server Error : ", error.message);
+            process.exit(1);
+        });
+    }catch(error){
+        console.log("Startup Error : ", error.message);
+    }
+};
+
+serverStart();
