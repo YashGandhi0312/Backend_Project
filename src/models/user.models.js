@@ -52,12 +52,12 @@ const userSchema = new mongoose.Schema(
     }
 );
 
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
     if(!this.isModified("password")){
-        return next();
+        return ;
     }
     this.password = await bcrypt.hash(this.password, 10);
-    next();
+    
 })
 
 userSchema.methods.isPasswordCorrect = async function(password){
@@ -79,7 +79,7 @@ userSchema.methods.generateAccessToken = async function() {
     )
 }
 
-userSchema.methods.generateAccessToken = async function() {
+userSchema.methods.generateRefereshToken = async function() {
     return jwt.sign(
         {
             _id : this._id,
